@@ -1,0 +1,161 @@
+tags:
+  - name: Tasks
+    description: tasks API
+
+paths:
+  /tasks:
+    # [GET] tasks
+    get:
+      tags:
+        - tasks
+      summary: Find All Tasks
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+          example: 10
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+
+    # [POST] tasks
+    post:
+      tags:
+        - tasks
+      summary: Add Task
+      parameters:
+        - name: body
+          in: body
+          description: create task
+          required: true
+          schema:
+            $ref: "#/definitions/tasks"
+      responses:
+        201:
+          description: "Created"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+  # [GET] tasks/id
+  /tasks/{id}:
+    get:
+      tags:
+        - tasks
+      summary: Find task By Id
+      parameters:
+        - name: id
+          in: path
+          description: Task Id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+    # [PUT] tasks/id
+    put:
+      tags:
+        - tasks
+      summary: Update Task By Id
+      parameters:
+        - name: id
+          in: path
+          description: task Id
+          required: true
+          type: integer
+        - name: body
+          in: body
+          description: task Data
+          required: true
+          schema:
+            $ref: "#/definitions/tasks"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+    # [DELETE] tasks/id
+    delete:
+      tags:
+        - tasks
+      summary: Delete task By Id
+      parameters:
+        - name: id
+          in: path
+          description: task Id
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+  /tasks/metrics:
+    get:
+      tags:
+        - tasks metrics
+      summary: get tasks metrics
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+  /tasks/populate:
+    post:
+      tags:
+        - populate
+      summary: populate table with fake data
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Server Error"
+
+# definitions
+definitions:
+  tasks:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+        description: title of tasks
+      status:
+        type: string
+        enum:
+          - OPEN
+          - IN_PROGRESS
+          - COMPLETED
+        description: status of the task (should match the TaskStatus enum values)
+
+schemes:
+  - https
+  - http
